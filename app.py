@@ -8,14 +8,11 @@ from sklearn.metrics import confusion_matrix, classification_report
 st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
 st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
 
-uploaded_file = st.file_uploader("📁 Upload file CSV", type="csv")
-
-if uploaded_file:
-    df = pd.read_csv(uploaded_file)
+try:
+    df = pd.read_csv("data_sentimen.csv") 
+    st.success("✅ Data berhasil dimuat!")
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
-        st.success("✅ Data berhasil dimuat!")
-
         # WordCloud Seluruh Teks
         st.subheader("1. WordCloud - Seluruh Sentimen")
         all_text = ' '.join(df['full_text'].astype(str))
@@ -59,7 +56,7 @@ if uploaded_file:
         ax_pie.axis('equal')
         st.pyplot(fig_pie)
 
-        # Confusion Matrix (jika ada kolom 'prediksi')
+        # Confusion Matrix 
         if 'prediksi' in df.columns:
             st.subheader("5. Confusion Matrix")
             cm = confusion_matrix(df['klasifikasi'], df['prediksi'],
@@ -80,3 +77,5 @@ if uploaded_file:
             st.info("❗ Kolom 'prediksi' tidak ditemukan. Hanya menampilkan label aktual.")
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
+except FileNotFoundError:
+    st.error("❌ File 'data_sentimen.csv' tidak ditemukan. Pastikan file ada di direktori yang sama dengan program.")
