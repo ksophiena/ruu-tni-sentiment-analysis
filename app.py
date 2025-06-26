@@ -9,7 +9,7 @@ from sklearn.metrics import confusion_matrix, classification_report
 st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
 st.title("📊 Visualisasi Sentimen RUU TNI dari File CSV")
 
-uploaded_file = st.file_uploader("📁 Upload file CSV (labeled')", type="csv")
+uploaded_file = st.file_uploader("📁 Upload file CSV (labeled)", type="csv")
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
