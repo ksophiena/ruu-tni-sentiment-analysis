@@ -1,4 +1,3 @@
-
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -7,9 +6,9 @@ from wordcloud import WordCloud, STOPWORDS
 from sklearn.metrics import confusion_matrix, classification_report
 
 st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
-st.title("📊 Visualisasi Sentimen RUU TNI dari File CSV")
+st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
 
-uploaded_file = st.file_uploader("📁 Upload file CSV (labeled)", type="csv")
+uploaded_file = st.file_uploader("📁 Upload file CSV", type="csv")
 
 if uploaded_file:
     df = pd.read_csv(uploaded_file)
@@ -18,7 +17,7 @@ if uploaded_file:
         st.success("✅ Data berhasil dimuat!")
 
         # WordCloud Seluruh Teks
-        st.subheader("1. WordCloud - Seluruh Teks")
+        st.subheader("1. WordCloud - Seluruh Sentimen")
         all_text = ' '.join(df['full_text'].astype(str))
         wordcloud_all = WordCloud(
             width=2000, height=1000, background_color='black',
@@ -27,7 +26,7 @@ if uploaded_file:
         st.image(wordcloud_all.to_array())
 
         # WordCloud per Sentimen
-        st.subheader("2. WordCloud per Sentimen")
+        st.subheader("2. WordCloud- Klasifikasi Sentimen")
         for sentiment, color in zip(['Positif', 'Netral', 'Negatif'], ['Greens', 'Blues', 'Reds']):
             st.markdown(f"**{sentiment}**")
             text = ' '.join(df[df['klasifikasi'] == sentiment]['full_text'].astype(str))
