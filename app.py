@@ -11,7 +11,7 @@ st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
 st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
 
 try:
-    df = pd.read_csv("ruu_tni_sentiment_analysis.csv") 
+    df = pd.read_csv("ruu_tni_sentiment_analysis(1).csv") 
     st.success("✅ Data berhasil dimuat!")
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
