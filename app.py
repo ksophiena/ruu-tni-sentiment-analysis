@@ -12,7 +12,6 @@ st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
 
 try:
     df = pd.read_csv("ruu_tni_sentiment_analysis.csv") 
-    df = pd.read_csv("hasil_analisis_sentimen.csv")
     st.success("✅ Data berhasil dimuat!")
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
