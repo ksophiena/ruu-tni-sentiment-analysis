@@ -1,3 +1,5 @@
+# app.py
+
 import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -14,7 +16,7 @@ try:
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
         # WordCloud Seluruh Teks
-        st.subheader("1. WordCloud - Seluruh Sentimen")
+        st.subheader("1. WordCloud - Seluruh Teks")
         all_text = ' '.join(df['full_text'].astype(str))
         wordcloud_all = WordCloud(
             width=2000, height=1000, background_color='black',
@@ -23,7 +25,7 @@ try:
         st.image(wordcloud_all.to_array())
 
         # WordCloud per Sentimen
-        st.subheader("2. WordCloud- Klasifikasi Sentimen")
+        st.subheader("2. WordCloud - Per Sentimen")
         for sentiment, color in zip(['Positif', 'Netral', 'Negatif'], ['Greens', 'Blues', 'Reds']):
             st.markdown(f"**{sentiment}**")
             text = ' '.join(df[df['klasifikasi'] == sentiment]['full_text'].astype(str))
@@ -56,7 +58,7 @@ try:
         ax_pie.axis('equal')
         st.pyplot(fig_pie)
 
-        # Confusion Matrix 
+        # Confusion Matrix & Classification Report
         if 'prediksi' in df.columns:
             st.subheader("5. Confusion Matrix")
             cm = confusion_matrix(df['klasifikasi'], df['prediksi'],
@@ -70,7 +72,7 @@ try:
             ax_cm.set_ylabel("Aktual")
             st.pyplot(fig_cm)
 
-            st.subheader("Classification Report")
+            st.subheader("6. Classification Report")
             report = classification_report(df['klasifikasi'], df['prediksi'], digits=4)
             st.code(report)
         else:
@@ -78,4 +80,4 @@ try:
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
 except FileNotFoundError:
-    st.error("❌ File 'data_sentimen.csv' tidak ditemukan. Pastikan file ada di direktori yang sama dengan program.")
+    st.error("❌ File 'ruu_tni_sentiment_analysis.csv' tidak ditemukan. Pastikan file sudah diunggah.")
