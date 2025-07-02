@@ -9,7 +9,7 @@ st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
 st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
 
 try:
-    df = pd.read_csv("ruu_tni_sentiment_analysis.csv") 
+    df = pd.read_csv("hasil_analisis_sentimen.csv") 
     st.success("✅ Data berhasil dimuat!")
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
@@ -56,26 +56,27 @@ try:
         ax_pie.axis('equal')
         st.pyplot(fig_pie)
 
-        # Confusion Matrix 
+                # Confusion Matrix 
         if 'prediksi' in df.columns:
-            st.subheader("5. Confusion Matrix")
-            cm = confusion_matrix(df['klasifikasi'], df['prediksi'],
-                                  labels=["Positif", "Negatif"])
-            fig_cm, ax_cm = plt.subplots()
-            sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-                        xticklabels=["Positif", "Negatif"],
-                        yticklabels=["Positif", "Negatif"],
-                        ax=ax_cm)
-            ax_cm.set_xlabel("Prediksi")
-            ax_cm.set_ylabel("Aktual")
-            st.pyplot(fig_cm)
+            st.subheader("5. Confusion Matrix dan Classification Report")
 
-            st.subheader("Classification Report")
-            report = classification_report(df['klasifikasi'], df['prediksi'], digits=4)
-            st.code(report)
-        else:
-            st.info("❗ Kolom 'prediksi' tidak ditemukan. Hanya menampilkan label aktual.")
-    else:
-        st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
-except FileNotFoundError:
-    st.error("❌ File 'data_sentimen.csv' tidak ditemukan. Pastikan file ada di direktori yang sama dengan program.")
+            # Filter hanya data Positif dan Negatif untuk evaluasi model
+            df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif'])]
+
+            if not df_eval.empty:
+                cm = confusion_matrix(df_eval['klasifikasi'], df_eval['prediksi'],
+                                      labels=["Positif", "Negatif"])
+                fig_cm, ax_cm = plt.subplots()
+                sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                            xticklabels=["Positif", "Negatif"],
+                            yticklabels=["Positif", "Negatif"],
+                            ax=ax_cm)
+                ax_cm.set_xlabel("Prediksi")
+                ax_cm.set_ylabel("Aktual")
+                st.pyplot(fig_cm)
+
+                report = classification_report(df_eval['klasifikasi'], df_eval['prediksi'], digits=4)
+                st.subheader("Classification Report")
+                st.code(report)
+            else:
+                st.warning("Tidak ada data Positif/Negatif untuk evaluasi prediksi.")
