@@ -60,11 +60,11 @@ try:
         if 'prediksi' in df.columns:
             st.subheader("5. Confusion Matrix")
             cm = confusion_matrix(df['klasifikasi'], df['prediksi'],
-                                  labels=["Positif", "Netral", "Negatif"])
+                                  labels=["Positif", "Negatif"])
             fig_cm, ax_cm = plt.subplots()
             sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-                        xticklabels=["Positif", "Netral", "Negatif"],
-                        yticklabels=["Positif", "Netral", "Negatif"],
+                        xticklabels=["Positif", "Negatif"],
+                        yticklabels=["Positif", "Negatif"],
                         ax=ax_cm)
             ax_cm.set_xlabel("Prediksi")
             ax_cm.set_ylabel("Aktual")
