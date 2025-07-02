@@ -23,64 +23,6 @@ try:
         st.image(wordcloud_all.to_array())
 
         # WordCloud per Sentimen
-        st.subheader("2. WordCloud- Klasifikasi Sentimen")
-        for sentiment, color in zip(['Positif', 'Netral', 'Negatif'], ['Greens', 'Blues', 'Reds']):
-            st.markdown(f"**{sentiment}**")
-            text = ' '.join(df[df['klasifikasi'] == sentiment]['full_text'].astype(str))
-            if text.strip():
-                wc = WordCloud(width=2000, height=1000, background_color='white',
-                               stopwords=STOPWORDS, colormap=color).generate(text)
-                st.image(wc.to_array())
-            else:
-                st.warning(f"Tidak ada data untuk sentimen {sentiment}.")
-
-        # Grafik Bar
-        st.subheader("3. Grafik Bar - Distribusi Sentimen")
-        sentiment_counts = df['klasifikasi'].value_counts()
-        fig_bar, ax_bar = plt.subplots()
-        sns.barplot(x=sentiment_counts.index, y=sentiment_counts.values,
-                    palette=['#5CB338', '#2394f7', '#f72323'], ax=ax_bar)
-        ax_bar.set_xlabel("Sentimen")
-        ax_bar.set_ylabel("Jumlah")
-        ax_bar.set_title("Distribusi Sentimen")
-        for i, v in enumerate(sentiment_counts.values):
-            ax_bar.text(i, v + 0.5, str(v), ha='center')
-        st.pyplot(fig_bar)
-
-        # Pie Chart
-        st.subheader("4. Pie Chart - Proporsi Sentimen")
-        fig_pie, ax_pie = plt.subplots()
-        ax_pie.pie(sentiment_counts.values, labels=sentiment_counts.index,
-                   autopct='%1.1f%%', colors=['#BFF6C3', '#C6E7FF', '#F7CFD8'],
-                   startangle=90, textprops={'fontsize': 12})
-        ax_pie.axis('equal')
-        st.pyplot(fig_pie)
-
-import streamlit as st
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from wordcloud import WordCloud, STOPWORDS
-from sklearn.metrics import confusion_matrix, classification_report
-
-st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
-st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
-
-try:
-    df = pd.read_csv("ruu_tni_sentiment_analysis.csv") 
-    st.success("✅ Data berhasil dimuat!")
-
-    if 'full_text' in df.columns and 'klasifikasi' in df.columns:
-        # WordCloud Seluruh Teks
-        st.subheader("1. WordCloud - Seluruh Sentimen")
-        all_text = ' '.join(df['full_text'].astype(str))
-        wordcloud_all = WordCloud(
-            width=2000, height=1000, background_color='black',
-            stopwords=STOPWORDS, colormap='Blues_r'
-        ).generate(all_text)
-        st.image(wordcloud_all.to_array())
-
-        # WordCloud per Sentimen
         st.subheader("2. WordCloud - Klasifikasi Sentimen")
         for sentiment, color in zip(['Positif', 'Netral', 'Negatif'], ['Greens', 'Blues', 'Reds']):
             st.markdown(f"**{sentiment}**")
@@ -122,7 +64,6 @@ try:
             df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif']) & df['prediksi'].notnull()]
 
             if not df_eval.empty:
-                # Confusion Matrix
                 cm = confusion_matrix(df_eval['klasifikasi'], df_eval['prediksi'], labels=["Positif", "Negatif"])
                 fig_cm, ax_cm = plt.subplots()
                 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
@@ -134,7 +75,6 @@ try:
                 ax_cm.set_title("Confusion Matrix")
                 st.pyplot(fig_cm)
 
-                # Classification Report
                 st.subheader("Classification Report")
                 report = classification_report(df_eval['klasifikasi'], df_eval['prediksi'], digits=4)
                 st.text(report)
