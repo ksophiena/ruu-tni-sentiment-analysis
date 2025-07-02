@@ -56,7 +56,8 @@ try:
         ax_pie.axis('equal')
         st.pyplot(fig_pie)
 
-                # Confusion Matrix 
+        # Confusion Matrix 
+               # Confusion Matrix 
         if 'prediksi' in df.columns:
             st.subheader("5. Confusion Matrix dan Classification Report")
 
@@ -78,3 +79,11 @@ try:
                 report = classification_report(df_eval['klasifikasi'], df_eval['prediksi'], digits=4)
                 st.subheader("Classification Report")
                 st.code(report)
+            else:
+                st.warning("Tidak ada data Positif/Negatif untuk evaluasi prediksi.")
+        else:
+            st.info("❗ Kolom 'prediksi' tidak ditemukan. Hanya menampilkan label aktual.")
+    else:
+        st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
+except FileNotFoundError:
+    st.error("❌ File 'data_sentimen.csv' tidak ditemukan. Pastikan file ada di direktori yang sama dengan program.")
