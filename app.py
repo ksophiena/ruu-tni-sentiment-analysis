@@ -78,5 +78,3 @@ try:
                 report = classification_report(df_eval['klasifikasi'], df_eval['prediksi'], digits=4)
                 st.subheader("Classification Report")
                 st.code(report)
-            else:
-                st.warning("Tidak ada data Positif/Negatif untuk evaluasi prediksi.")
