@@ -23,7 +23,7 @@ try:
         st.image(wordcloud_all.to_array())
 
         # WordCloud per Sentimen
-        st.subheader("2. WordCloud - Klasifikasi Sentimen")
+        st.subheader("2. WordCloud- Klasifikasi Sentimen")
         for sentiment, color in zip(['Positif', 'Netral', 'Negatif'], ['Greens', 'Blues', 'Reds']):
             st.markdown(f"**{sentiment}**")
             text = ' '.join(df[df['klasifikasi'] == sentiment]['full_text'].astype(str))
@@ -56,33 +56,34 @@ try:
         ax_pie.axis('equal')
         st.pyplot(fig_pie)
 
-        # Confusion Matrix & Classification Report
+        # Confusion Matrix 
+               # Confusion Matrix 
         if 'prediksi' in df.columns:
             st.subheader("5. Confusion Matrix dan Classification Report")
 
-            # Filter hanya data Positif & Negatif dan yang prediksinya tidak kosong
-            df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif']) & df['prediksi'].notnull()]
+            # Filter hanya data Positif dan Negatif untuk evaluasi model
+            df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif'])]
 
             if not df_eval.empty:
-                cm = confusion_matrix(df_eval['klasifikasi'], df_eval['prediksi'], labels=["Positif", "Negatif"])
+                cm = confusion_matrix(df_eval['klasifikasi'], df_eval['prediksi'],
+                                      labels=["Positif", "Negatif"])
                 fig_cm, ax_cm = plt.subplots()
                 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
                             xticklabels=["Positif", "Negatif"],
                             yticklabels=["Positif", "Negatif"],
-                            cbar=False, linewidths=1.5, square=True, ax=ax_cm)
+                            ax=ax_cm)
                 ax_cm.set_xlabel("Prediksi")
                 ax_cm.set_ylabel("Aktual")
-                ax_cm.set_title("Confusion Matrix")
                 st.pyplot(fig_cm)
 
-                st.subheader("Classification Report")
                 report = classification_report(df_eval['klasifikasi'], df_eval['prediksi'], digits=4)
-                st.text(report)
+                st.subheader("Classification Report")
+                st.code(report)
             else:
-                st.warning("Tidak ada data Positif/Negatif yang bisa dievaluasi.")
+                st.warning("Tidak ada data Positif/Negatif untuk evaluasi prediksi.")
         else:
             st.info("❗ Kolom 'prediksi' tidak ditemukan. Hanya menampilkan label aktual.")
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
 except FileNotFoundError:
-    st.error("❌ File 'ruu_tni_sentiment_analysis.csv' tidak ditemukan. Pastikan file ada di direktori yang sama dengan program.")
+    st.error("❌ File 'data_sentimen.csv' tidak ditemukan. Pastikan file ada di direktori yang sama dengan program.")
