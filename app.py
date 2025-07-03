@@ -57,12 +57,11 @@ try:
         st.pyplot(fig_pie)
 
         # Confusion Matrix 
-               # Confusion Matrix 
         if 'prediksi' in df.columns:
             st.subheader("5. Confusion Matrix dan Classification Report")
 
             # Filter hanya data Positif dan Negatif untuk evaluasi model
-            df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif'])]
+            df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif', ''])]
 
             if not df_eval.empty:
                 cm = confusion_matrix(df_eval['klasifikasi'], df_eval['prediksi'],
