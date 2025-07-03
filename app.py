@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 from wordcloud import WordCloud, STOPWORDS
-from sklearn.metrics import classification_report
 from PIL import Image
 
 st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
@@ -19,7 +18,7 @@ try:
             width=2000, height=1000, background_color='black',
             stopwords=STOPWORDS, colormap='Blues_r'
         ).generate(all_text)
-        st.image(wordcloud_all.to_array())
+        st.image(wordcloud_all.to_array(), width=600)
 
         # WordCloud per Sentimen
         st.subheader("2. WordCloud - Klasifikasi Sentimen")
@@ -29,7 +28,7 @@ try:
             if text.strip():
                 wc = WordCloud(width=2000, height=1000, background_color='white',
                                stopwords=STOPWORDS, colormap=color).generate(text)
-                st.image(wc.to_array())
+                st.image(wc.to_array(), width=600)
             else:
                 st.warning(f"Tidak ada data untuk sentimen {sentiment}.")
 
@@ -37,7 +36,7 @@ try:
         st.subheader("3. Grafik Batang - Distribusi Sentimen")
         try:
             bar_img = Image.open("grafik_batang.png")
-            st.image(bar_img, caption="Distribusi Sentimen", use_container_width=True)
+            st.image(bar_img, caption="Distribusi Sentimen", width=600)
         except FileNotFoundError:
             st.warning("❗ Gambar 'grafik_batang.png' tidak ditemukan.")
 
@@ -45,7 +44,7 @@ try:
         st.subheader("4. Pie Chart - Proporsi Sentimen")
         try:
             pie_img = Image.open("pie_chart.png")
-            st.image(pie_img, caption="Proporsi Sentimen", use_container_width=True)
+            st.image(pie_img, caption="Proporsi Sentimen", width=600)
         except FileNotFoundError:
             st.warning("❗ Gambar 'pie_chart.png' tidak ditemukan.")
 
@@ -54,18 +53,9 @@ try:
             st.subheader("5. Confusion Matrix (Gambar)")
             try:
                 cm_img = Image.open("confusion_matrix.png")
-                st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
+                st.image(cm_img, caption="Confusion Matrix", width=600)
             except FileNotFoundError:
                 st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
-
-            # Classification Report
-            st.subheader("Classification Report")
-            df_eval = df[df['klasifikasi'].isin(['Positif', 'Negatif'])]
-            if not df_eval.empty:
-                report = classification_report(df_eval['klasifikasi'], df_eval['prediksi'], digits=4)
-                st.code(report)
-            else:
-                st.warning("Tidak ada data Positif/Negatif untuk evaluasi classification report.")
         else:
             st.info("❗ Kolom 'prediksi' tidak ditemukan. Hanya menampilkan label aktual.")
     else:
