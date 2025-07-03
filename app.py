@@ -56,10 +56,6 @@ try:
                 st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
             except FileNotFoundError:
                 st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
-            else:
-                st.warning("Tidak ada data Positif/Negatif untuk evaluasi classification report.")
-        else:
-            st.info("❗ Kolom 'prediksi' tidak ditemukan. Hanya menampilkan label aktual.")
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
 except FileNotFoundError:
