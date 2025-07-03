@@ -37,7 +37,7 @@ try:
         st.subheader("3. Grafik Batang - Distribusi Sentimen")
         try:
             bar_img = Image.open("grafik_batang.png")
-            st.image(bar_img, caption="Distribusi Sentimen", use_column_width=True)
+            st.image(bar_img, caption="Distribusi Sentimen", use_container_width=True)
         except FileNotFoundError:
             st.warning("❗ Gambar 'grafik_batang.png' tidak ditemukan.")
 
@@ -45,7 +45,7 @@ try:
         st.subheader("4. Pie Chart - Proporsi Sentimen")
         try:
             pie_img = Image.open("pie_chart.png")
-            st.image(pie_img, caption="Proporsi Sentimen", use_column_width=True)
+            st.image(pie_img, caption="Proporsi Sentimen", use_container_width=True)
         except FileNotFoundError:
             st.warning("❗ Gambar 'pie_chart.png' tidak ditemukan.")
 
@@ -54,7 +54,7 @@ try:
             st.subheader("5. Confusion Matrix (Gambar)")
             try:
                 cm_img = Image.open("confusion_matrix.png")
-                st.image(cm_img, caption="Confusion Matrix", use_column_width=True)
+                st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
             except FileNotFoundError:
                 st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
 
