@@ -83,7 +83,7 @@ try:
         # Baris 4: Confusion Matrix (dikecilkan)
         if 'prediksi' in df.columns:
             st.subheader("4. Confusion Matrix")
-            col_cm, _ = st.columns([1, 2])
+            col_cm, _ = st.columns([2, 1])
             with col_cm:
                 try:
                     cm_img = Image.open("confusion_matrix.png")
