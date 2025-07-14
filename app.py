@@ -13,65 +13,82 @@ try:
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
 
-        # Seluruh WordCloud
-        with st.container():
-            st.subheader("1. WordCloud - Seluruh Sentimen")
+        # Baris 1: WordCloud Seluruh Teks dan WordCloud Positif
+        st.subheader("1. WordCloud - Seluruh Teks dan Sentimen Positif")
+        col1, col2 = st.columns(2)
+        with col1:
             all_text = ' '.join(df['full_text'].astype(str))
             wordcloud_all = WordCloud(
-                width=2000, height=1000, background_color='black',
+                width=800, height=400, background_color='black',
                 stopwords=STOPWORDS, colormap='Blues_r'
             ).generate(all_text)
-            st.image(wordcloud_all.to_array(), use_column_width=True)
+            st.image(wordcloud_all.to_array(), caption="Seluruh Teks", use_container_width=True)
+        with col2:
+            text_pos = ' '.join(df[df['klasifikasi'] == 'Positif']['full_text'].astype(str))
+            if text_pos.strip():
+                wc_pos = WordCloud(
+                    width=800, height=400, background_color='white',
+                    stopwords=STOPWORDS, colormap='Greens'
+                ).generate(text_pos)
+                st.image(wc_pos.to_array(), caption="Sentimen Positif", use_container_width=True)
+            else:
+                st.warning("Tidak ada data untuk sentimen Positif.")
 
         st.markdown("---")
 
-        # WordCloud per Sentimen (horizontal layout)
-        st.subheader("2. WordCloud - Klasifikasi Sentimen")
-        col1, col2, col3 = st.columns(3)
-        sentiments = ['Positif', 'Netral', 'Negatif']
-        colors = ['Greens', 'Blues', 'Reds']
-        cols = [col1, col2, col3]
-
-        for sentiment, color, col in zip(sentiments, colors, cols):
-            with col:
-                st.markdown(f"**{sentiment}**")
-                text = ' '.join(df[df['klasifikasi'] == sentiment]['full_text'].astype(str))
-                if text.strip():
-                    wc = WordCloud(width=800, height=400, background_color='white',
-                                   stopwords=STOPWORDS, colormap=color).generate(text)
-                    st.image(wc.to_array(), use_column_width=True)
-                else:
-                    st.warning(f"Tidak ada data.")
+        # Baris 2: WordCloud Netral dan Negatif
+        st.subheader("2. WordCloud - Sentimen Netral dan Negatif")
+        col3, col4 = st.columns(2)
+        with col3:
+            text_netral = ' '.join(df[df['klasifikasi'] == 'Netral']['full_text'].astype(str))
+            if text_netral.strip():
+                wc_netral = WordCloud(
+                    width=800, height=400, background_color='white',
+                    stopwords=STOPWORDS, colormap='Blues'
+                ).generate(text_netral)
+                st.image(wc_netral.to_array(), caption="Sentimen Netral", use_container_width=True)
+            else:
+                st.warning("Tidak ada data untuk sentimen Netral.")
+        with col4:
+            text_negatif = ' '.join(df[df['klasifikasi'] == 'Negatif']['full_text'].astype(str))
+            if text_negatif.strip():
+                wc_negatif = WordCloud(
+                    width=800, height=400, background_color='white',
+                    stopwords=STOPWORDS, colormap='Reds'
+                ).generate(text_negatif)
+                st.image(wc_negatif.to_array(), caption="Sentimen Negatif", use_container_width=True)
+            else:
+                st.warning("Tidak ada data untuk sentimen Negatif.")
 
         st.markdown("---")
 
-        # Grafik Batang
-        with st.container():
-            st.subheader("3. Grafik Batang - Distribusi Sentimen")
+        # Baris 3: Grafik Batang dan Pie Chart
+        st.subheader("3. Grafik Distribusi dan Proporsi Sentimen")
+        col5, col6 = st.columns(2)
+        with col5:
             try:
                 bar_img = Image.open("grafik_batang.png")
-                st.image(bar_img, caption="Distribusi Sentimen", use_column_width=True)
+                st.image(bar_img, caption="Distribusi Sentimen", use_container_width=True)
             except FileNotFoundError:
                 st.warning("❗ Gambar 'grafik_batang.png' tidak ditemukan.")
-
-        # Pie Chart
-        with st.container():
-            st.subheader("4. Pie Chart - Proporsi Sentimen")
+        with col6:
             try:
                 pie_img = Image.open("pie_chart.png")
-                st.image(pie_img, caption="Proporsi Sentimen", use_column_width=True)
+                st.image(pie_img, caption="Proporsi Sentimen", use_container_width=True)
             except FileNotFoundError:
                 st.warning("❗ Gambar 'pie_chart.png' tidak ditemukan.")
 
-        # Confusion Matrix
+        st.markdown("---")
+
+        # Baris 4: Confusion Matrix (dikecilkan)
         if 'prediksi' in df.columns:
-            with st.container():
-                st.subheader("5. Confusion Matrix (Gambar)")
-                try:
-                    cm_img = Image.open("confusion_matrix.png")
-                    st.image(cm_img, caption="Confusion Matrix", use_column_width=True)
-                except FileNotFoundError:
-                    st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
+            st.subheader("4. Confusion Matrix")
+            try:
+                cm_img = Image.open("confusion_matrix.png")
+                resized_cm = cm_img.resize((600, 400))
+                st.image(resized_cm, caption="Confusion Matrix", use_container_width=True)
+            except FileNotFoundError:
+                st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
 
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
