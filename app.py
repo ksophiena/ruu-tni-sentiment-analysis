@@ -83,11 +83,13 @@ try:
         # Baris 4: Confusion Matrix (dikecilkan)
         if 'prediksi' in df.columns:
             st.subheader("4. Confusion Matrix")
-            try:
-                cm_img = Image.open("confusion_matrix.png")
-                st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
-            except FileNotFoundError:
-                st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
+            col_cm, _ = st.columns([1, 2])
+            with col_cm:
+                try:
+                    cm_img = Image.open("confusion_matrix.png")
+                    st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
+                except FileNotFoundError:
+                    st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
 
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
