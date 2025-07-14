@@ -85,8 +85,7 @@ try:
             st.subheader("4. Confusion Matrix")
             try:
                 cm_img = Image.open("confusion_matrix.png")
-                resized_cm = cm_img.resize((600, 400))
-                st.image(resized_cm, caption="Confusion Matrix", use_container_width=True)
+                st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
             except FileNotFoundError:
                 st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
 
