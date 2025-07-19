@@ -4,12 +4,12 @@ from wordcloud import WordCloud, STOPWORDS
 from PIL import Image
 
 st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
-st.title("📊 Visualisasi Hasil Analisis Sentimen RUU TNI")
+st.title("Visualisasi Hasil Analisis Sentimen RUU TNI")
 st.markdown("---")
 
 try:
     df = pd.read_csv("ruu_tni_sentiment_analysis.csv") 
-    st.success("✅ Data berhasil dimuat!")
+    st.success("✅Data berhasil dimuat!")
 
     if 'full_text' in df.columns and 'klasifikasi' in df.columns:
 
@@ -90,6 +90,40 @@ try:
                     st.image(cm_img, caption="Confusion Matrix", use_container_width=True)
                 except FileNotFoundError:
                     st.warning("❗ Gambar 'confusion_matrix.png' tidak ditemukan.")
+
+        st.markdown("## 📊 Distribusi Sentimen (Prediksi)")
+        sentiment_counts = df['prediksi'].value_counts()
+        fig_bar, ax_bar = plt.subplots()
+        sns.barplot(x=sentiment_counts.index, y=sentiment_counts.values, ax=ax_bar)
+        ax_bar.set_title("Jumlah Tweet per Sentimen (Prediksi)")
+        ax_bar.set_ylabel("Jumlah")
+        ax_bar.set_xlabel("Sentimen")
+        st.pyplot(fig_bar)
+        
+        st.markdown("## 🧩 Diagram Lingkaran Proporsi Sentimen (Prediksi)")
+        fig_pie, ax_pie = plt.subplots()
+        ax_pie.pie(sentiment_counts.values, labels=sentiment_counts.index, autopct='%1.1f%%', startangle=90)
+        ax_pie.axis("equal")
+        st.pyplot(fig_pie)
+        
+        st.markdown("## 🧪 Confusion Matrix dan Evaluasi Model")
+        true_labels = df['klasifikasi']
+        pred_labels = df['prediksi']
+        cm = confusion_matrix(true_labels, pred_labels, labels=["Positif", "Netral", "Negatif"])
+        fig_cm, ax_cm = plt.subplots()
+        sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
+                    xticklabels=["Positif", "Netral", "Negatif"],
+                    yticklabels=["Positif", "Netral", "Negatif"],
+                    ax=ax_cm)
+        ax_cm.set_xlabel("Prediksi")
+        ax_cm.set_ylabel("Label Asli")
+        ax_cm.set_title("Confusion Matrix")
+        st.pyplot(fig_cm)
+        
+        st.markdown("### 📈 Classification Report")
+        report = classification_report(true_labels, pred_labels, target_names=["Positif", "Netral", "Negatif"], output_dict=True)
+        report_df = pd.DataFrame(report).transpose()
+        st.dataframe(report_df.style.format("{:.2f}"))
 
     else:
         st.error("❌ Kolom 'full_text' dan 'klasifikasi' wajib ada di dalam file CSV.")
