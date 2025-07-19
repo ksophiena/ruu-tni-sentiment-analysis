@@ -5,7 +5,6 @@ from PIL import Image
 
 st.set_page_config(page_title="Visualisasi Sentimen RUU TNI", layout="wide")
 st.title("Visualisasi Hasil Analisis Sentimen RUU TNI di Media Sosial X")
-st.title("📊 Visualisasi Analisis Sentimen terhadap RUU TNI di Media Sosial X")
 st.markdown("""
 📌 Visualisasi ini bertujuan untuk menyajikan hasil analisis sentimen publik terhadap Rancangan Undang-Undang Tentara Nasional Indonesia (RUU TNI) di media sosial X.
 
