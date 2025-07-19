@@ -8,7 +8,7 @@ st.title("Visualisasi Hasil Analisis Sentimen RUU TNI di Media Sosial X")
 st.markdown("""
 📌 Visualisasi ini bertujuan untuk menyajikan hasil analisis sentimen publik terhadap Rancangan Undang-Undang Tentara Nasional Indonesia (RUU TNI) di media sosial X.
 
-🗓️ Data diambil dari media sosial X pada periode: 
+🗓️ Data yang digunakan diambil dari media sosial X pada periode: 
 **1 Oktober 2024 – 31 Maret 2025**
 """)
 st.markdown("---")
